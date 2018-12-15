@@ -48,6 +48,8 @@ class QifParser(object):
             raise QifParserException('Data is empty')
         qif_obj = Qif()
         chunks = data.split('\n^\n')
+        if(len(chunks) < 2):
+            chunks = data.split('^null') # Italian Unicredity buggy export
         last_type = None
         last_account = None
         transactions_header = None
@@ -187,7 +189,7 @@ class QifParser(object):
             elif line[0] == 'P':
                 curItem.payee = line[1:]
             elif line[0] == 'M':
-                curItem.memo = line[1:]
+                curItem.memo = line[1:].rstrip()
             elif line[0] == 'K':
                 curItem.mtype = line[1:]
             elif line[0] == 'A':
@@ -210,7 +212,7 @@ class QifParser(object):
                     split.category = cat
             elif line[0] == 'E':
                 split = curItem.splits[-1]
-                split.memo = line[1:-1]
+                split.memo = line[1:-1].rstrip()
             elif line[0] == 'A':
                 split = curItem.splits[-1]
                 if not split.address:
@@ -247,7 +249,7 @@ class QifParser(object):
             elif line[0] == 'P':
                 curItem.payee = line[1:]
             elif line[0] == 'M':
-                curItem.memo = line[1:]
+                curItem.memo = line[1:].rstrip()
             elif line[0] == '1':
                 curItem.first_payment_date = line[1:]
             elif line[0] == '2':
@@ -282,7 +284,7 @@ class QifParser(object):
                     split.category = cat
             elif line[0] == 'E':
                 split = curItem.splits[-1]
-                split.memo = line[1:-1]
+                split.memo = line[1:-1].rstrip()
             elif line[0] == 'A':
                 split = curItem.splits[-1]
                 if not split.address:
@@ -323,7 +325,7 @@ class QifParser(object):
             elif line[0] == 'C':
                 curItem.cleared = line[1:]
             elif line[0] == 'M':
-                curItem.memo = line[1:]
+                curItem.memo = line[1:].rstrip()
             elif line[0] == 'P':
                 curItem.first_line = line[1:]
             elif line[0] == 'L':
