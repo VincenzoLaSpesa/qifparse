@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import six
+import re
 from datetime import datetime
 from decimal import Decimal
 from qifparse.qif import (
@@ -22,6 +23,14 @@ NON_INVST_ACCOUNT_TYPES = [
     '!Type:Invoice',  # Quicken for business only
 ]
 
+
+def cleanNumber(stringa):
+    s=stringa.replace(',','')
+    try:
+        float(s)
+        return s
+    except ValueError:
+        raise ValueError('Wrong currency format')
 
 class QifParserException(Exception):
     pass
@@ -172,7 +181,7 @@ class QifParser(object):
                     line.startswith('!Type:Memorized'):
                 continue
             elif line[0] == 'T':
-                curItem.amount = Decimal(line[1:])
+                curItem.amount = Decimal(cleanNumber(line[1:]))
             elif line[0] == 'C':
                 curItem.cleared = line[1:]
             elif line[0] == 'P':
@@ -209,7 +218,7 @@ class QifParser(object):
                 split.address.append(line[1:])
             elif line[0] == '$':
                 split = curItem.splits[-1]
-                split.amount = Decimal(line[1:])
+                split.amount = Decimal(cleanNumber(line[1:]))
             else:
                 # don't recognise this line; ignore it
                 print ("Skipping unknown line:\n" + str(line))
@@ -232,7 +241,7 @@ class QifParser(object):
             elif line[0] == 'N':
                 curItem.num = line[1:]
             elif line[0] == 'T':
-                curItem.amount = Decimal(line[1:])
+                curItem.amount = Decimal(cleanNumber(line[1:]))
             elif line[0] == 'C':
                 curItem.cleared = line[1:]
             elif line[0] == 'P':
@@ -281,7 +290,7 @@ class QifParser(object):
                 split.address.append(line[1:])
             elif line[0] == '$':
                 split = curItem.splits[-1]
-                split.amount = Decimal(line[1:])
+                split.amount = Decimal(cleanNumber(line[1:]))
             else:
                 # don't recognise this line; ignore it
                 print ("Skipping unknown line:\n" + str(line))
@@ -302,15 +311,15 @@ class QifParser(object):
             elif line[0] == 'D':
                 curItem.date = cls_.parseQifDateTime(line[1:])
             elif line[0] == 'T':
-                curItem.amount = Decimal(line[1:])
+                curItem.amount = Decimal(cleanNumber(line[1:]))
             elif line[0] == 'N':
                 curItem.action = line[1:]
             elif line[0] == 'Y':
                 curItem.security = line[1:]
             elif line[0] == 'I':
-                curItem.price = Decimal(line[1:])
+                curItem.price = Decimal(cleanNumber(line[1:]))
             elif line[0] == 'Q':
-                curItem.quantity = Decimal(line[1:])
+                curItem.quantity = Decimal(cleanNumber(line[1:]))
             elif line[0] == 'C':
                 curItem.cleared = line[1:]
             elif line[0] == 'M':
@@ -320,9 +329,9 @@ class QifParser(object):
             elif line[0] == 'L':
                 curItem.to_account = line[2:-1]
             elif line[0] == '$':
-                curItem.amount_transfer = Decimal(line[1:])
+                curItem.amount_transfer = Decimal(cleanNumber(line[1:]))
             elif line[0] == 'O':
-                curItem.commission = Decimal(line[1:])
+                curItem.commission = Decimal(cleanNumber(line[1:]))
         return curItem
 
     @classmethod
