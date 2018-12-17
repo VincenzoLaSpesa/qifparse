@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 import unittest
 import os
-from qifparse.parser import QifParser
+
+try:
+    from qifparse.parser import QifParser
+except:
+    import sys
+    sys.path.append('../../')
+    from qifparse.parser import QifParser
 
 filename = os.path.join(os.path.dirname(__file__), 'file.qif')
 filename2 = os.path.join(os.path.dirname(__file__), 'transactions_only.qif')
