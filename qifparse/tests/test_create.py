@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 import unittest
+import sys
 
-try:
-    from qifparse import qif
-except:
-    import sys
-    sys.path.append('../../')
-    from qifparse import qif
+sys.path.insert(0,'../../')
+from qifparse import qif
 
 
 class TestCreateQIF(unittest.TestCase):
