@@ -17,7 +17,6 @@ class TestQIFParsing(unittest.TestCase):
         cls.transactionsfile = os.path.join(os.path.dirname(__file__), 'transactions_only.qif')
         cls.testfiles = glob.glob('file*.qif')
         cls.standardFiles = glob.glob('fileStandard*.qif')
-        pprint.pprint(cls.testfiles)
     
     def testParseFile(self):
         for filename in self.testfiles:
@@ -48,10 +47,4 @@ class TestQIFParsing(unittest.TestCase):
 
 if __name__ == "__main__":
     import unittest
-    try:
-        from qifparse.parser import QifParser
-    except:        
-        print(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-        sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-        from qifparse.parser import QifParser
     unittest.main()
