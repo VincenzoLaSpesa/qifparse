@@ -25,9 +25,16 @@ NON_INVST_ACCOUNT_TYPES = [
 
 
 def cleanNumber(stringa):
-    s=stringa.replace(',','')
+    dot=stringa.find('.')
+    comma=stringa.find(',')
+    s=stringa
+    if comma < dot:
+        s=stringa.replace(',','')
+    if dot < comma:
+        s=stringa.replace('.','').replace(',','.')
     try:
         float(s)
+        print (stringa,"\t",s)
         return s
     except ValueError:
         raise ValueError('Wrong currency format')
