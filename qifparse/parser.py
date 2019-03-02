@@ -34,7 +34,6 @@ def cleanNumber(stringa):
         s=stringa.replace('.','').replace(',','.')
     try:
         float(s)
-        print (stringa,"\t",s)
         return s
     except ValueError:
         raise ValueError('Wrong currency format')
